@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Contact Backbone</title>
+  </head>
+  <body>
+    <header>
+      Contact list
+    </header>
+    <aside class="sidebar">
+    </aside>
+    <main>
+    </main>
+    <script type="text/template" id="EditViewTemplate">
+      EDIT!
+        <input type="text" value='' placeholder="Email"/>
+        <input type="text" value='' placeholder="First Name"/>
+        <input type="text" value='' placeholder="Last Name"/>
+        <input type="text" value='' placeholder="Phone Number"/>
+        <input type="text" value='' placeholder="Twitter"/>
+        <input type="text" value='' placeholder="Linkedin"/>
+    </script>
+    <script type="text/tempalte" id="ListViewTemplate">
+      <h2>Sidebar</h2>
+
+      <ul>
+        <% _.forEach(contacts, function(contact){ %>
+          <li>
+            <a href="#contact/<%=contact._id%>"><%= contact.firstName %></a>
+          </li>
+        <% }) %>
+      </ul>
+    </script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.2.3/backbone-min.js"></script>
+   <script src="app.js"></script>
+  </body>
+</html>
