@@ -1,0 +1,19 @@
+{
+  "name": "bower install neat --save",
+  "version": "0.0.0",
+  "homepage": "https://github.com/katebrock/Contact",
+  "authors": [
+    "Kate Brock <katherine.marshall.brock@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

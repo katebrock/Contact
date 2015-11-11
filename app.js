@@ -1,3 +1,12 @@
+////////////////////////////////
+//        questions           //
+////////////////////////////////
+
+// cannot figure out how to get my contacts information to show up
+// when name is clicked
+// get input boxes to clear after add contact button is clicked
+// get the add contact button to work
+
 /////////////////////////////////
 /////////////////////////////////
 //        directions           //
@@ -20,40 +29,6 @@
 // You should use a Backbone.Router to handle routes for a home screen.
 // You should have one Backbone.View sub-classes: a HomeView constructor.
 // You should have a Contact Model constructor and Collection that uses the Contact model
-
-//////////////////////////////
-//        routes            //
-//////////////////////////////
-
-var Router = Backbone.Router.extend({
-  routes: {
-    ''           : 'home',
-    'contact/:id': 'viewPost'
-  },
-
-  home: function(){
-    //creates a new homepage view
-    var mainView = new HomePage();
-    //renders the template to the view
-    mainView.render();
-    //renders the view to the main tag
-    $('main').html(mainView.el);
-  },
-
-  viewPost(postId){
-    var model = new Contact({
-      id: postId
-    });
-
-    model.fetch().then(function(){
-      var view = new EditView({
-        model: model
-      });
-      view.render();
-      $('main').html(view.el);
-    });
-  }
-});
 
 //////////////////////////////
 //        model             //
@@ -119,6 +94,18 @@ var EditView = Backbone.View.extend({
     var twitter      = this.$('.twitter').val();
     var linkedin     = this.$('.linkedin').val();
 
+    // if (.email.trim() === '') {
+    //   alert("don't forget your email!");
+    //   return;
+    // }
+    // if (.firstname.trim() === '') {
+    //   alert("you don't know your first name?!");
+    //   return;
+    // }
+    // if (.lastname.trim() === '') {
+    //   alert("whatcho last name?");
+    //   return;
+    // }
     ////////////////////////////
     //          posts         //
     ////////////////////////////
@@ -140,7 +127,7 @@ var EditView = Backbone.View.extend({
 
   // listen to the keypresses, which is defined above
   handleEnter: function(event){
-    if (event.keyCode ===13) {
+    if (event.keyCode === 13) {
       this.send();
     }
   },
@@ -151,7 +138,44 @@ var EditView = Backbone.View.extend({
     event.preventDefault();
     this.send();
   },
+  // render: function(){
+  //   var html = $('#EditViewTemplate').html();
+  //   this.$el.html(html);
+  //   return this;
+  // }
+});
 
+//////////////////////////////
+//        routes            //
+//////////////////////////////
+
+var Router = Backbone.Router.extend({
+  routes: {
+    ''           : 'home',
+    'contact/:id': 'viewPost'
+  },
+
+  home: function(){
+    //creates a new homepage view
+    var mainView = new EditView();
+    //renders the template to the view
+    mainView.render();
+    //renders the view to the main tag
+    $('main').html(mainView.el);
+  },
+
+  viewPost: function(){
+    var model = new Contact({
+      id: postId
+    });
+    model.fetch().then(function(){
+      var view = new ListView({
+        model: model
+      });
+      view.render();
+      $('main').html(view.el);
+    });
+  }
 });
 
 

@@ -3,31 +3,69 @@
   <head>
     <meta charset="utf-8">
     <title>Contact Backbone</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css">
+    <link rel="stylesheet" href="styles/main.css">
   </head>
   <body>
     <header>
       Contact list
+      <a href="#">Home</a>
     </header>
     <aside class="sidebar">
     </aside>
     <main>
+
     </main>
     <script type="text/template" id="EditViewTemplate">
-      EDIT!
-        <input type="text" value='' placeholder="Email"/>
-        <input type="text" value='' placeholder="First Name"/>
-        <input type="text" value='' placeholder="Last Name"/>
-        <input type="text" value='' placeholder="Phone Number"/>
-        <input type="text" value='' placeholder="Twitter"/>
-        <input type="text" value='' placeholder="Linkedin"/>
+      <!-- EDIT! -->
+      <div class="container">
+        <span class="info">Fill out forms below:</span>
+        <br>
+        <input type="text" class="input" value='' placeholder="Email"/>
+        <br>
+        <input type="text" class="input" value='' placeholder="First Name"/>
+        <br>
+        <input type="text" class="input" value='' placeholder="Last Name"/>
+        <br>
+        <input type="text" class="input" value='' placeholder="Phone Number"/>
+        <br>
+        <input type="text" class="input" value='' placeholder="Twitter"/>
+        <br>
+        <input type="text" class="input" value='' placeholder="Linkedin"/>
+        <br>
+        <button type="submit" class="input" value='submit'>Add Contact</button>
+      </div>
     </script>
-    <script type="text/tempalte" id="ListViewTemplate">
+    <script type="text/template" id="SidebarTemplate">
       <h2>Sidebar</h2>
-
+        <ul>
+          <% _.forEach(contacts, function(contact){ %>
+            <li>
+              <a href="#contact/<%=contact._id%>"><%= contact.firstName %></a>
+            </li>
+        </ul>
+    </script>
+    <script type="text/template" id="ListViewTemplate">
+      <h2>Contact List</h2>
       <ul>
         <% _.forEach(contacts, function(contact){ %>
           <li>
             <a href="#contact/<%=contact._id%>"><%= contact.firstName %></a>
+          </li>
+          <li>
+            <%= contact.lastName %></a>
+          </li>
+          <li>
+            <%= contact.email %></a>
+          </li>
+          <li>
+            <%= contact.phoneNumber %></a>
+          </li>
+          <li>
+            <%= contact.twitter %></a>
+          </li>
+          <li>
+            <%= contact.linkedin %></a>
           </li>
         <% }) %>
       </ul>
