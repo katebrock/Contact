@@ -60,7 +60,11 @@ var Contacts = Backbone.Collection.extend({
 
 var ListView = Backbone.View.extend({
   template: _.template($('#ListViewTemplate').html()),
+  initialize: function() {
+    this.listenTo(this.collection, 'change', this.render);
+  },
   render: function(){
+    console.log('calling render');
     this.$el.html(this.template({
       contacts: this.collection.toJSON()
     }));
@@ -75,24 +79,36 @@ var ListView = Backbone.View.extend({
 var EditView = Backbone.View.extend({
     template: _.template($('#EditViewTemplate').html()),
     render: function() {
-      this.$el.html(this.template())
-      console.log('hi');
+      var data = {
+        _id: '',
+        email: '',
+        firstName: '',
+        lastName: '',
+        phoneNumber: '',
+        twitter: '',
+        linkedin: ''
+      }
+      if (this.model) {
+        data = this.model.toJSON();
+      }
+
+      this.$el.html(this.template(data));
     },
     events: {
-    'keypress .msg' : 'handleEnter',
-    'click .send'   : 'handleSendClick'
+    'click .submit'   : 'handleSubmitClick'
   },
 
 // this function will be called after the handleEnter and handleSendClick is run.
 // below is where the input value will be stored to the correct input.
 
-  send: function(){
+  handleSubmitClick: function(){
     var email        = this.$('.email').val();
     var firstName    = this.$('.firstname').val();
-    var lastName     = this.$('.lasname').val();
+    var lastName     = this.$('.lastname').val();
     var phoneNumber  = this.$('.phonenumber').val();
     var twitter      = this.$('.twitter').val();
     var linkedin     = this.$('.linkedin').val();
+
 
     // if (.email.trim() === '') {
     //   alert("don't forget your email!");
@@ -115,14 +131,35 @@ var EditView = Backbone.View.extend({
     // add the new post model to the posts collection, will keep the list up to date
     // and send the data to the server
 
-    this.collection.create({
-      email       : email,
-      firstName   : firstname,
-      lastName    : lastName,
-      phoneNumber : phonenumber,
-      twitter     : twitter,
-      linkedin    : linkedin
-    });
+    if (this.model) {
+      this.model.set({
+        email       : email,
+        firstName   : firstName,
+        lastName    : lastName,
+        phoneNumber : phoneNumber,
+        twitter     : twitter,
+        linkedin    : linkedin
+      });
+
+      var model = this.model;
+      this.model.save().then(function(){
+        App.router.navigate('post/' + model.get('_id'), {trigger: true});
+      });
+    } else {
+      App.collection.create({
+        email       : email,
+        firstName   : firstName,
+        lastName    : lastName,
+        phoneNumber : phoneNumber,
+        twitter     : twitter,
+        linkedin    : linkedin
+      }, {
+        success: function(){
+          debugger;
+          App.router.navigate('home', {trigger: true});
+        }
+      })
+    }
   },
 
   // listen to the keypresses, which is defined above
@@ -152,10 +189,12 @@ var EditView = Backbone.View.extend({
 var Router = Backbone.Router.extend({
   routes: {
     ''           : 'home',
+    'home'           : 'home',
     'contact/:id': 'viewPost'
   },
 
   home: function(){
+    console.log('called home..et');
     //creates a new homepage view
     var mainView = new EditView();
     //renders the template to the view
@@ -164,36 +203,37 @@ var Router = Backbone.Router.extend({
     $('main').html(mainView.el);
   },
 
-  viewPost: function(){
-    var model = new Contact({
-      id: postId
+  viewPost: function(postId){
+    var model = App.collection.get(postId);
+
+    var view = new EditView({
+      model: model
     });
-    model.fetch().then(function(){
-      var view = new ListView({
-        model: model
-      });
-      view.render();
-      $('main').html(view.el);
-    });
+
+    view.render();
+    $('main').html(view.el);
   }
 });
 
+var App = App || {};
+
 
 function buildSidebar(){
-  var collection = new Contacts();
+  App.collection = new Contacts();
   //create a new home page view
   var sidebarView = new ListView({
-    collection: collection
+    collection: App.collection
   });
 
-  collection.fetch().then(function(){
+  App.collection.fetch().then(function(){
     //render the template to the view
     sidebarView.render();
     //render the view to the main tag
     $('.sidebar').html(sidebarView.el);
+
+    App.router = new Router();
+    Backbone.history.start();
   });
 }
 
 buildSidebar();
-var router = new Router();
-Backbone.history.start();

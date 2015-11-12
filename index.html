@@ -8,8 +8,10 @@
   </head>
   <body>
     <header>
-      Contact list
-      <a href="#">Home</a>
+      <div class="header">
+      <div class="address">Address Book</div>
+      <a href="#" class="home">Home</a>
+    </div>
     </header>
     <aside class="sidebar">
     </aside>
@@ -21,19 +23,24 @@
       <div class="container">
         <span class="info">Fill out forms below:</span>
         <br>
-        <input type="text" class="input" value='' placeholder="Email"/>
+        <input type="text" class="input email" value='<%= email %>' placeholder="Email"/>
         <br>
-        <input type="text" class="input" value='' placeholder="First Name"/>
+        <input type="text" class="input firstname" value='<%= firstName %>' placeholder="First Name"/>
         <br>
-        <input type="text" class="input" value='' placeholder="Last Name"/>
+        <input type="text" class="input lastname" value='<%= lastName %>' placeholder="Last Name"/>
         <br>
-        <input type="text" class="input" value='' placeholder="Phone Number"/>
+        <input type="text" class="input phonenumber" value='<%= phoneNumber %>' placeholder="Phone Number"/>
         <br>
-        <input type="text" class="input" value='' placeholder="Twitter"/>
+        <input type="text" class="input twitter" value='<%= twitter %>' placeholder="Twitter"/>
         <br>
-        <input type="text" class="input" value='' placeholder="Linkedin"/>
+        <input type="text" class="input linkedin" value='<%= linkedin %>' placeholder="Linkedin"/>
         <br>
-        <button type="submit" class="input" value='submit'>Add Contact</button>
+
+        <% if(_id) { %>
+        <button type="submit" class="input submit" value='submit'>Edit Contact</button>
+        <% } else {%>
+        <button type="submit" class="input submit" value='submit'>Add Contact</button>
+        <% } %>
       </div>
     </script>
     <script type="text/template" id="SidebarTemplate">
@@ -50,22 +57,7 @@
       <ul>
         <% _.forEach(contacts, function(contact){ %>
           <li>
-            <a href="#contact/<%=contact._id%>"><%= contact.firstName %></a>
-          </li>
-          <li>
-            <%= contact.lastName %></a>
-          </li>
-          <li>
-            <%= contact.email %></a>
-          </li>
-          <li>
-            <%= contact.phoneNumber %></a>
-          </li>
-          <li>
-            <%= contact.twitter %></a>
-          </li>
-          <li>
-            <%= contact.linkedin %></a>
+            <a href="#contact/<%=contact._id%>"><%= contact.firstName %> <%= contact.lastName %></a>
           </li>
         <% }) %>
       </ul>
